@@ -208,7 +208,7 @@
               <text value="0"/>
             </properties>
           </component>
-          <component id="d7152" class="javax.swing.JButton" binding="button20" default-binding="true">
+          <component id="d7152" class="javax.swing.JButton" binding="decimal">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>

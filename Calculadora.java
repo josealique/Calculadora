@@ -1,11 +1,12 @@
 import javax.swing.*;
+import java.util.*;
 
 public class Calculadora {
     private JTextField Operaciones;
     private JTextField Resultado;
     private JComboBox<String> TipoOperacion;
-    private JComboBox Base;
-    private JComboBox Historial;
+    private JComboBox<String> Base;
+    private JComboBox<String> Historial;
     private JButton a1Button;
     private JButton xButton;
     private JButton a2Button;
@@ -25,13 +26,14 @@ public class Calculadora {
     private JButton a9Button;
     private JButton logButton;
     private JButton a0Button;
-    private JButton button20;
+    private JButton decimal;
     private JButton sinButton;
     private JButton equal;
     private JButton cosButton;
     private JButton fXButton;
     private JPanel Coso;
     private JPanel Botones;
+    private Map<String, JDialog> dialogs = new HashMap<>();
     private final JButton[] numeros = new JButton[] {
             a1Button, a2Button, a3Button, a4Button, a5Button, a6Button, a7Button ,a8Button, a9Button, a0Button
     };
@@ -40,14 +42,14 @@ public class Calculadora {
     };
 
     public Calculadora() {
-        TipoOperacion.addItem("Operaciones simples");
-        TipoOperacion.addItem("Romanos");
-        TipoOperacion.addItem("Notacion RPN");
-        TipoOperacion.addItem("Vectores y Matrices");
-        TipoOperacion.addItem("Polinomios");
-        TipoOperacion.addItem("Estadisticas");
-        TipoOperacion.addItem("Cambio de unidades");
-        TipoOperacion.addItem("Cambio de moneda");
+        TipoOperacion.addItem("Operaciones simples"); // index 0
+        TipoOperacion.addItem("Romanos"); // index 1
+        TipoOperacion.addItem("Notacion RPN"); // index 2
+        TipoOperacion.addItem("Vectores y Matrices"); // index 3
+        TipoOperacion.addItem("Polinomios"); // index 4
+        TipoOperacion.addItem("Estadisticas"); // index 5
+        TipoOperacion.addItem("Cambio de unidades"); // index 6
+        TipoOperacion.addItem("Cambio de moneda"); // index 7
 
         Base.addItem("Decimal");
         Base.addItem("Octal");
@@ -55,12 +57,13 @@ public class Calculadora {
 
         Historial.addItem("Historial");
 
+        dialogs.put("Cambio de moneda", new CambioDeDivisas());
+        dialogs.put("Cambio de unidades", new CambioUnidades());
 
         for (JButton boton : numeros) {
             boton.addActionListener(e -> {
                 String txt = Operaciones.getText() + boton.getText();
                 Operaciones.setText(txt);
-
             });
         }
 
@@ -75,19 +78,37 @@ public class Calculadora {
             String resultado = String.valueOf(operacionesSimples());
             Resultado.setText(resultado);
 
+        });
 
-        DELButton.addActionListener(lambda -> {
+        DELButton.addActionListener(e -> {
             Operaciones.setText("");
             Resultado.setText("");
         });
 
+        sinButton.addActionListener(e -> {
+            double seno = Math.sin(Double.parseDouble(Operaciones.getText()));
+            Resultado.setText(String.valueOf(seno));
+        });
 
+        cosButton.addActionListener(e -> {
+            double cos = Math.cos(Double.parseDouble(Operaciones.getText()));
+            Resultado.setText(String.valueOf(cos));
+        });
+
+
+        //TipoOperacion.addActionListener(actionEvent -> addActions());
+        TipoOperacion.addItemListener(e -> {
+            if(TipoOperacion.getSelectedItem().equals(e.getItem())) {
+                JDialog dialog = dialogs.get(e.getItem());
+                dialog.pack();
+                dialog.setVisible(true);
+            }
         });
     }
 
     public void mostrar() {
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.add(Coso);
         frame.setLocationRelativeTo(null);
         frame.pack();
@@ -123,11 +144,8 @@ public class Calculadora {
         return op;
     }
 
-
-
     public static void main(String[] args) {
         Calculadora c = new Calculadora();
         c.mostrar();
     }
-
 }
