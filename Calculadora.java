@@ -31,7 +31,7 @@ public class Calculadora {
     private JButton equal;
     private JButton cosButton;
     private JButton fXButton;
-    private JPanel Coso;
+    private JPanel PanelPrincipal;
     private JPanel Botones;
     private Map<String, JDialog> dialogs = new HashMap<>();
     private final JButton[] numeros = new JButton[] {
@@ -55,7 +55,7 @@ public class Calculadora {
         Base.addItem("Octal");
         Base.addItem("Hexadecimal");
 
-        Historial.addItem("Historial");
+        Historial.addItem("Ocultar Keypad");
 
         dialogs.put("Cambio de moneda", new CambioDeDivisas());
         dialogs.put("Cambio de unidades", new CambioUnidades());
@@ -77,7 +77,16 @@ public class Calculadora {
         equal.addActionListener(e -> {
             String resultado = String.valueOf(operacionesSimples());
             Resultado.setText(resultado);
+            if (Objects.equals(TipoOperacion.getSelectedItem().toString(), "Romanos")) {
+                System.out.println("ROMANI");
+                Resultado.setText(convertirANumerosRomanos());
+            }
 
+        });
+
+        expButton.addActionListener(e -> {
+            int exp = Math.getExponent(Integer.parseInt(Operaciones.getText()));
+            Resultado.setText(String.valueOf(exp));
         });
 
         DELButton.addActionListener(e -> {
@@ -95,13 +104,22 @@ public class Calculadora {
             Resultado.setText(String.valueOf(cos));
         });
 
+        Historial.addActionListener(e -> {
+            Botones.setVisible(false);
+        });
+
 
         //TipoOperacion.addActionListener(actionEvent -> addActions());
         TipoOperacion.addItemListener(e -> {
             if(TipoOperacion.getSelectedItem().equals(e.getItem())) {
-                JDialog dialog = dialogs.get(e.getItem());
-                dialog.pack();
-                dialog.setVisible(true);
+                try {
+                    JDialog dialog = dialogs.get(e.getItem());
+                    dialog.pack();
+                    dialog.setVisible(true);
+                } catch (Exception ex) {
+                    // TODO: Implementar en calculadora sin dialogo
+
+                }
             }
         });
     }
@@ -109,7 +127,7 @@ public class Calculadora {
     public void mostrar() {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame.add(Coso);
+        frame.add(PanelPrincipal);
         frame.setLocationRelativeTo(null);
         frame.pack();
         frame.setVisible(true);
@@ -142,6 +160,72 @@ public class Calculadora {
             }
         }
         return op;
+    }
+
+    public String convertirANumerosRomanos() {
+        System.out.println("Romano");
+        int numero = Integer.parseInt(Resultado.getText());
+        int i, miles, centenas, decenas, unidades;
+        StringBuilder romano = new StringBuilder();
+        //obtenemos cada cifra del número
+        miles = numero / 1000;
+        centenas = numero / 100 % 10;
+        decenas = numero / 10 % 10;
+        unidades = numero % 10;
+
+        //millar
+        for (i = 1; i <= miles; i++) {
+            romano.append("M");
+        }
+
+        //centenas
+        if (centenas == 9) {
+            romano.append("CM");
+        } else if (centenas >= 5) {
+            romano.append("D");
+            for (i = 6; i <= centenas; i++) {
+                romano.append("C");
+            }
+        } else if (centenas == 4) {
+            romano.append("CD");
+        } else {
+            for (i = 1; i <= centenas; i++) {
+                romano.append("C");
+            }
+        }
+
+        //decenas
+        if (decenas == 9) {
+            romano.append("XC");
+        } else if (decenas >= 5) {
+            romano.append("L");
+            for (i = 6; i <= decenas; i++) {
+                romano.append("X");
+            }
+        } else if (decenas == 4) {
+            romano.append("XL");
+        } else {
+            for (i = 1; i <= decenas; i++) {
+                romano.append("X");
+            }
+        }
+
+        //unidades
+        if (unidades == 9) {
+            romano.append("IX");
+        } else if (unidades >= 5) {
+            romano.append("V");
+            for (i = 6; i <= unidades; i++) {
+                romano.append("I");
+            }
+        } else if (unidades == 4) {
+            romano.append("IV");
+        } else {
+            for (i = 1; i <= unidades; i++) {
+                romano.append("I");
+            }
+        }
+        return romano.toString();
     }
 
     public static void main(String[] args) {
