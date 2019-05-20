@@ -1,3 +1,5 @@
+import com.sun.org.apache.regexp.internal.RE;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -20,7 +22,7 @@ public class Calculadora {
     private JButton dividir;
     private JButton sumar;
     private JButton restar;
-    private JButton inButton;
+    private JButton RaizButton;
     private JButton a7Button;
     private JButton a8Button;
     private JButton a9Button;
@@ -55,10 +57,12 @@ public class Calculadora {
         Base.addItem("Octal");
         Base.addItem("Hexadecimal");
 
+        Historial.addItem("Mostrar Keypad");
         Historial.addItem("Ocultar Keypad");
 
         dialogs.put("Cambio de moneda", new CambioDeDivisas());
         dialogs.put("Cambio de unidades", new CambioUnidades());
+        dialogs.put("f(x)",new Fx());
 
         for (JButton boton : numeros) {
             boton.addActionListener(e -> {
@@ -75,18 +79,20 @@ public class Calculadora {
             });
         }
         equal.addActionListener(e -> {
-            String resultado = String.valueOf(operacionesSimples());
-            Resultado.setText(resultado);
             if (Objects.equals(TipoOperacion.getSelectedItem().toString(), "Romanos")) {
-                System.out.println("ROMANI");
                 Resultado.setText(convertirANumerosRomanos());
             }
-
+            String resultado = String.valueOf(operacionesSimples());
+            Resultado.setText(resultado);
         });
 
         expButton.addActionListener(e -> {
-            int exp = Math.getExponent(Integer.parseInt(Operaciones.getText()));
-            Resultado.setText(String.valueOf(exp));
+            try {
+                int exp = Math.getExponent(Integer.parseInt(Operaciones.getText()));
+                Resultado.setText(String.valueOf(exp));
+            } catch (Exception e1){
+                JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         DELButton.addActionListener(e -> {
@@ -95,23 +101,44 @@ public class Calculadora {
         });
 
         sinButton.addActionListener(e -> {
-            double seno = Math.sin(Double.parseDouble(Operaciones.getText()));
-            Resultado.setText(String.valueOf(seno));
+            try {
+                double seno = Math.sin(Double.parseDouble(Operaciones.getText()));
+                Resultado.setText(String.valueOf(seno));
+            } catch (Exception e1){
+                JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         cosButton.addActionListener(e -> {
-            double cos = Math.cos(Double.parseDouble(Operaciones.getText()));
-            Resultado.setText(String.valueOf(cos));
+            try {
+                double cos = Math.cos(Double.parseDouble(Operaciones.getText()));
+                Resultado.setText(String.valueOf(cos));
+            } catch (Exception e1){
+                JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        RaizButton.addActionListener(e -> {
+            try {
+                double raiz = Math.sqrt(Double.parseDouble(Operaciones.getText()));
+                Resultado.setText(String.valueOf(raiz));
+            } catch (Exception e1){
+                JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         Historial.addActionListener(e -> {
-            Botones.setVisible(false);
+            if (Objects.equals(Historial.getSelectedItem().toString(), "Ocultar Keypad")){
+                Botones.setVisible(false);
+            } else {
+                Botones.setVisible(true);
+            }
         });
 
 
         //TipoOperacion.addActionListener(actionEvent -> addActions());
         TipoOperacion.addItemListener(e -> {
-            if(TipoOperacion.getSelectedItem().equals(e.getItem())) {
+            if(Objects.equals(TipoOperacion.getSelectedItem(), e.getItem())) {
                 try {
                     JDialog dialog = dialogs.get(e.getItem());
                     dialog.pack();
@@ -163,8 +190,7 @@ public class Calculadora {
     }
 
     public String convertirANumerosRomanos() {
-        System.out.println("Romano");
-        int numero = Integer.parseInt(Resultado.getText());
+        int numero = Integer.parseInt(Operaciones.getText());
         int i, miles, centenas, decenas, unidades;
         StringBuilder romano = new StringBuilder();
         //obtenemos cada cifra del número

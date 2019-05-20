@@ -34,7 +34,7 @@ public class CambioDeDivisas extends JDialog {
         mapa.put("Dolar Australiano",dolarAustraliano);
         mapa.put("Libra",libra);
 
-        Convertir.addActionListener(e -> euro_a_Dolar());
+        Convertir.addActionListener(e -> conversion());
 
         Cancelar.addActionListener(e -> onCancel());
 
@@ -55,8 +55,8 @@ public class CambioDeDivisas extends JDialog {
         dispose();
     }
 
-    private void euro_a_Dolar(){
-        double cantidad = Double.parseDouble(CantidadDivisa.getText());;
+    private void conversion(){
+        double cantidad = Double.parseDouble(CantidadDivisa.getText());
         double resultado = 0.0;
         resultado =  cantidad * mapa.get(MonedaFinal.getSelectedItem().toString());
         Resultado.setText(String.valueOf(resultado));
