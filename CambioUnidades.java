@@ -13,21 +13,20 @@ public class CambioUnidades extends JDialog {
     private JTextField Destino;
     private JComboBox<String> UnidadPrincipal;
     private JComboBox<String> Prefijo;
-    Map<String,Double> mapa = new HashMap<>();
-    double mega = 1_000_000;
-    double kilo = 1000;
-    double hecto = 100;
-    double deca = 10;
-    double deci = 0.1;
-    double centi = 0.01;
-    double mili = 0.001;
-    double micro = 0.000_001;
+    private Map<String,Double> mapa = new HashMap<>();
+    private double mega = 1_000_000;
+    private double kilo = 1000;
+    private double hecto = 100;
+    private double deca = 10;
+    private double deci = 0.1;
+    private double centi = 0.01;
+    private double mili = 0.001;
+    private double micro = 0.000_001;
 
     public CambioUnidades() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(Convertir);
-
 
         UnidadPrincipal.addItem("Metro");
         UnidadPrincipal.addItem("Gramo");

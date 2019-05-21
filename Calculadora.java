@@ -32,7 +32,7 @@ public class Calculadora {
     private JButton sinButton;
     private JButton equal;
     private JButton cosButton;
-    private JButton fXButton;
+    private JButton porcentajeButton;
     private JPanel PanelPrincipal;
     private JPanel Botones;
     private Map<String, JDialog> dialogs = new HashMap<>();
@@ -44,14 +44,15 @@ public class Calculadora {
     };
 
     public Calculadora() {
-        TipoOperacion.addItem("Operaciones simples"); // index 0
-        TipoOperacion.addItem("Romanos"); // index 1
-        TipoOperacion.addItem("Notacion RPN"); // index 2
-        TipoOperacion.addItem("Vectores y Matrices"); // index 3
-        TipoOperacion.addItem("Polinomios"); // index 4
-        TipoOperacion.addItem("Estadisticas"); // index 5
-        TipoOperacion.addItem("Cambio de unidades"); // index 6
-        TipoOperacion.addItem("Cambio de moneda"); // index 7
+        TipoOperacion.addItem("Operaciones simples");
+        TipoOperacion.addItem("Romanos");
+        TipoOperacion.addItem("Notacion RPN");
+        TipoOperacion.addItem("Vectores y Matrices");
+        TipoOperacion.addItem("Polinomios");
+        TipoOperacion.addItem("Estadisticas");
+        TipoOperacion.addItem("Cambio de unidades");
+        TipoOperacion.addItem("Cambio de moneda");
+        TipoOperacion.addItem("Funciones");
 
         Base.addItem("Decimal");
         Base.addItem("Octal");
@@ -62,7 +63,7 @@ public class Calculadora {
 
         dialogs.put("Cambio de moneda", new CambioDeDivisas());
         dialogs.put("Cambio de unidades", new CambioUnidades());
-        dialogs.put("f(x)",new Fx());
+        dialogs.put("Funciones",new Fx());
 
         for (JButton boton : numeros) {
             boton.addActionListener(e -> {
@@ -125,6 +126,17 @@ public class Calculadora {
             } catch (Exception e1){
                 JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
             }
+        });
+
+        xButton.addActionListener(e ->{
+            int numero = Integer.parseInt(Operaciones.getText());
+            int  op = 1;
+            while (numero != 0){
+                op=op*numero;
+                numero--;
+            }
+            Operaciones.setText(Operaciones.getText()+"!");
+            Resultado.setText(String.valueOf(op));
         });
 
         Historial.addActionListener(e -> {

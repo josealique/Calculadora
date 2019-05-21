@@ -57,7 +57,7 @@ public class CambioDeDivisas extends JDialog {
 
     private void conversion(){
         double cantidad = Double.parseDouble(CantidadDivisa.getText());
-        double resultado = 0.0;
+        double resultado;
         resultado =  cantidad * mapa.get(MonedaFinal.getSelectedItem().toString());
         Resultado.setText(String.valueOf(resultado));
     }
