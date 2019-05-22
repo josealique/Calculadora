@@ -21,7 +21,7 @@ public class Token {
     }
 
     // Private constructor (we don't want others to build tokens)
-    private Token() {}
+    public Token() {}
 
     // Torna un token de tipus "NUMBER"
     static Token tokNumber(int value) {
@@ -77,7 +77,7 @@ public class Token {
     }
 
     // Método que comprueba si el carácter es un operador o un paréntesis
-    private static void checkChar(char c, List<Token> tokens) {
+    public static void checkChar(char c, List<Token> tokens) {
         if (c == '+' || c == '-' || c == '*' || c == '/'){
             tokens.add(Token.tokOp(c));
         } else if (c == '(' || c == ')' ) {
@@ -92,7 +92,7 @@ public class Token {
     }
 
     // Método que añade los numeros correspondientes a la lista de Tokens
-    private static int addNumber(List<Token> tokens, int i, String expr){
+    public static int addNumber(List<Token> tokens, int i, String expr){
         StringBuilder actualToken = new StringBuilder();
         for (int j = i; j < expr.length(); j++) {
             if (!Character.isDigit(expr.charAt(j))) { break; }

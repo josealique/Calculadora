@@ -27,7 +27,7 @@ public class Evaluator {
     }
 
     // Limpiar la pila de Paréntesis
-    private static void clean(List<Token> tokenRPN, LinkedList<Token> tokenOp) {
+    public static void clean(List<Token> tokenRPN, LinkedList<Token> tokenOp) {
         while (!tokenOp.isEmpty()) {
             // Si el Token es de tipo Paren, sacamos el primer elemento en la pila
             if (tokenOp.peek().getTtype() == Token.Toktype.PAREN) {
@@ -39,7 +39,7 @@ public class Evaluator {
     }
 
     // Método que determina la precedencia del Token
-    private static void determinePrecedence(List<Token> tokenRPN, LinkedList<Token> tokenOp, Token t) {
+    public static void determinePrecedence(List<Token> tokenRPN, LinkedList<Token> tokenOp, Token t) {
         if (t.getTk() == ')') {
             clean(tokenRPN, tokenOp);
         } else if (Token.getPrecedence(t) > Token.getPrecedence(tokenOp.peek()) ||
@@ -55,7 +55,7 @@ public class Evaluator {
     }
 
     // Método que realiza las operaciones correspondientes
-    private static Token operate(LinkedList<Token> tokenResult, char c) {
+    public static Token operate(LinkedList<Token> tokenResult, char c) {
         Token t1 = tokenResult.pop(), t2 = tokenResult.pop();
         return (c == '+') ? Token.tokNumber(t2.getValue() + t1.getValue()) :
                 (c == '-') ? Token.tokNumber(t2.getValue() - t1.getValue()) :
@@ -64,7 +64,7 @@ public class Evaluator {
     }
 
     // Método que añade los Tokens de tipo número y los Tokens de tipo operador
-    private static void addTokens(Token t, List<Token> listRPN, LinkedList<Token> operators){
+    public static void addTokens(Token t, List<Token> listRPN, LinkedList<Token> operators){
         if (t.getTtype() == Token.Toktype.NUMBER) {
             listRPN.add(t);
         } else if (t.getTtype() != Token.Toktype.NUMBER) {

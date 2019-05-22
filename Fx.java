@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.*;
 
 public class Fx extends JDialog {
     private JPanel contentPane;
@@ -23,7 +22,7 @@ public class Fx extends JDialog {
         opciones.addItem("floor()");
         opciones.addItem("round()");
         opciones.addItem("tan()");
-        opciones.addItem("log()");
+        opciones.addItem("log10()");
         opciones.addItem("cbrt()");
 
         buttonOK.addActionListener(e -> funciones());
@@ -44,6 +43,10 @@ public class Fx extends JDialog {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    /**
+     * @author jmaliquer
+     * @since 22/5/19
+     * */
     private void borrarTexto() {
         Operacion1.setText("");
         Resultado1.setText("");
@@ -83,9 +86,9 @@ public class Fx extends JDialog {
                 break;
             case 3:
                 try {
-                    Double log = Math.log(Double.parseDouble(Operacion1.getText()));
+                    Double log10 = Math.log10(Double.parseDouble(Operacion1.getText()));
                     Operacion1.setText("log("+Operacion1.getText()+")");
-                    resultado = String.valueOf(log);
+                    resultado = String.valueOf(log10);
                     Resultado1.setText(resultado);
                 } catch (Exception e){
                     JOptionPane.showMessageDialog(null,"Error en la función","Error",JOptionPane.ERROR_MESSAGE);

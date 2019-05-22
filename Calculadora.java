@@ -1,5 +1,3 @@
-import com.sun.org.apache.regexp.internal.RE;
-
 import javax.swing.*;
 import java.util.*;
 
@@ -8,7 +6,7 @@ public class Calculadora {
     private JTextField Resultado;
     private JComboBox<String> TipoOperacion;
     private JComboBox<String> Base;
-    private JComboBox<String> Historial;
+    private JComboBox<String> Option;
     private JButton a1Button;
     private JButton xButton;
     private JButton a2Button;
@@ -28,7 +26,7 @@ public class Calculadora {
     private JButton a9Button;
     private JButton logButton;
     private JButton a0Button;
-    private JButton decimal;
+    private JButton ASCII;
     private JButton sinButton;
     private JButton equal;
     private JButton cosButton;
@@ -48,7 +46,6 @@ public class Calculadora {
         TipoOperacion.addItem("Romanos");
         TipoOperacion.addItem("Notacion RPN");
         TipoOperacion.addItem("Vectores y Matrices");
-        TipoOperacion.addItem("Polinomios");
         TipoOperacion.addItem("Estadisticas");
         TipoOperacion.addItem("Cambio de unidades");
         TipoOperacion.addItem("Cambio de moneda");
@@ -58,12 +55,12 @@ public class Calculadora {
         Base.addItem("Octal");
         Base.addItem("Hexadecimal");
 
-        Historial.addItem("Mostrar Keypad");
-        Historial.addItem("Ocultar Keypad");
+        Option.addItem("Mostrar Keypad");
+        Option.addItem("Ocultar Keypad");
 
         dialogs.put("Cambio de moneda", new CambioDeDivisas());
         dialogs.put("Cambio de unidades", new CambioUnidades());
-        dialogs.put("Funciones",new Fx());
+        dialogs.put("Funciones", new Fx());
 
         for (JButton boton : numeros) {
             boton.addActionListener(e -> {
@@ -72,27 +69,39 @@ public class Calculadora {
             });
         }
 
-        for (JButton boton: simples){
+        for (JButton boton : simples) {
             boton.addActionListener(e -> {
-                String string =
-                        Operaciones.getText() + " " + boton.getText() + " ";
+                String string = Operaciones.getText() + " "
+                        + boton.getText() + " ";
                 Operaciones.setText(string);
             });
         }
         equal.addActionListener(e -> {
             if (Objects.equals(TipoOperacion.getSelectedItem().toString(), "Romanos")) {
                 Resultado.setText(convertirANumerosRomanos());
+            } else if (Objects.equals(Base.getSelectedItem().toString(), "Decimal")) {
+                String resultado = String.valueOf(operacionesSimples());
+                Resultado.setText(resultado);
+            } else if (Objects.equals(Base.getSelectedItem().toString(), "Octal")) {
+                int numero = Integer.parseInt(Operaciones.getText());
+                String octal = Integer.toOctalString(numero);
+                Resultado.setText(octal);
+            } else if (Objects.equals(Base.getSelectedItem().toString(), "Hexadecimal")){
+                int numero1 = Integer.parseInt(Operaciones.getText());
+                String hexadecimal = Integer.toHexString(numero1).toUpperCase();
+                Resultado.setText(hexadecimal);
+            } else {
+                String resultado = String.valueOf(operacionesSimples());
+                Resultado.setText(resultado);
             }
-            String resultado = String.valueOf(operacionesSimples());
-            Resultado.setText(resultado);
         });
 
         expButton.addActionListener(e -> {
             try {
                 int exp = Math.getExponent(Integer.parseInt(Operaciones.getText()));
                 Resultado.setText(String.valueOf(exp));
-            } catch (Exception e1){
-                JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, "No puedes dejar el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -105,8 +114,8 @@ public class Calculadora {
             try {
                 double seno = Math.sin(Double.parseDouble(Operaciones.getText()));
                 Resultado.setText(String.valueOf(seno));
-            } catch (Exception e1){
-                JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, "No puedes dejar el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -114,43 +123,63 @@ public class Calculadora {
             try {
                 double cos = Math.cos(Double.parseDouble(Operaciones.getText()));
                 Resultado.setText(String.valueOf(cos));
-            } catch (Exception e1){
-                JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, "No puedes dejar el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
             }
+        });
+
+        porcentajeButton.addActionListener(e -> {
+            int porcentaje = 100;
+            int numero = Integer.parseInt(Operaciones.getText());
+
         });
 
         RaizButton.addActionListener(e -> {
             try {
                 double raiz = Math.sqrt(Double.parseDouble(Operaciones.getText()));
                 Resultado.setText(String.valueOf(raiz));
-            } catch (Exception e1){
-                JOptionPane.showMessageDialog(null,"No puedes dejar el campo vacío","Error",JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, "No puedes dejar el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        xButton.addActionListener(e ->{
+        xButton.addActionListener(e -> {
             int numero = Integer.parseInt(Operaciones.getText());
-            int  op = 1;
-            while (numero != 0){
-                op=op*numero;
+            int op = 1;
+            while (numero != 0) {
+                op = op * numero;
                 numero--;
             }
-            Operaciones.setText(Operaciones.getText()+"!");
+            Operaciones.setText(Operaciones.getText() + "!");
             Resultado.setText(String.valueOf(op));
         });
 
-        Historial.addActionListener(e -> {
-            if (Objects.equals(Historial.getSelectedItem().toString(), "Ocultar Keypad")){
+        logButton.addActionListener(e -> {
+            double log = Math.log10(Double.parseDouble(Operaciones.getText()));
+            Resultado.setText(String.valueOf(log));
+        });
+
+        ASCII.addActionListener(e -> {
+            int num = Integer.parseInt(Operaciones.getText());
+            StringBuilder resultado = new StringBuilder();
+            for (int i = 0; i < num; i++) {
+                char ascii = (char) num;
+                resultado.append(ascii);
+            }
+            Resultado.setText(String.valueOf(resultado));
+        });
+
+        Option.addActionListener(e -> {
+            if (Objects.equals(Option.getSelectedItem().toString(), "Ocultar Keypad")) {
                 Botones.setVisible(false);
             } else {
                 Botones.setVisible(true);
             }
         });
 
-
         //TipoOperacion.addActionListener(actionEvent -> addActions());
         TipoOperacion.addItemListener(e -> {
-            if(Objects.equals(TipoOperacion.getSelectedItem(), e.getItem())) {
+            if (Objects.equals(TipoOperacion.getSelectedItem(), e.getItem())) {
                 try {
                     JDialog dialog = dialogs.get(e.getItem());
                     dialog.pack();
@@ -162,6 +191,7 @@ public class Calculadora {
             }
         });
     }
+
 
     public void mostrar() {
         JFrame frame = new JFrame();
@@ -188,14 +218,19 @@ public class Calculadora {
                 denom = valores[i];
                 valor2 = Integer.parseInt(valores[++i]);
             }
-            if (denom.equals("+")){
-                op = valor1 + valor2;
-            } else if (denom.equals("-")){
-                op = valor1 - valor2;
-            } else if (denom.equals("*")){
-                op = valor1 * valor2;
-            } else {
-                op = valor1 / valor2;
+            switch (denom) {
+                case "+":
+                    op = valor1 + valor2;
+                    break;
+                case "-":
+                    op = valor1 - valor2;
+                    break;
+                case "*":
+                    op = valor1 * valor2;
+                    break;
+                default:
+                    op = valor1 / valor2;
+                    break;
             }
         }
         return op;
