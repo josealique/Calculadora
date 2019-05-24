@@ -1,5 +1,13 @@
+package Clases;
+
 import javax.swing.*;
 import java.util.*;
+
+/**
+ * @author jmaliquer
+ * @version 1.0
+ * @since 13-05-2019
+ */
 
 public class Calculadora {
     private JTextField Operaciones;
@@ -46,7 +54,7 @@ public class Calculadora {
         TipoOperacion.addItem("Romanos");
         TipoOperacion.addItem("Notacion RPN");
         TipoOperacion.addItem("Vectores y Matrices");
-        TipoOperacion.addItem("Estadisticas");
+        TipoOperacion.addItem("Fracciones");
         TipoOperacion.addItem("Cambio de unidades");
         TipoOperacion.addItem("Cambio de moneda");
         TipoOperacion.addItem("Funciones");
@@ -61,6 +69,7 @@ public class Calculadora {
         dialogs.put("Cambio de moneda", new CambioDeDivisas());
         dialogs.put("Cambio de unidades", new CambioUnidades());
         dialogs.put("Funciones", new Fx());
+        dialogs.put("Fracciones",new Fraction());
 
         for (JButton boton : numeros) {
             boton.addActionListener(e -> {
@@ -76,9 +85,15 @@ public class Calculadora {
                 Operaciones.setText(string);
             });
         }
+
+        /*
+          Sentencias para cada botón de la calculadora
+         */
         equal.addActionListener(e -> {
             if (Objects.equals(TipoOperacion.getSelectedItem().toString(), "Romanos")) {
                 Resultado.setText(convertirANumerosRomanos());
+            } else if (Objects.equals(TipoOperacion.getSelectedItem().toString(), "Fracciones")){
+                Fraccion fraccion = new Fraccion();
             } else if (Objects.equals(Base.getSelectedItem().toString(), "Decimal")) {
                 String resultado = String.valueOf(operacionesSimples());
                 Resultado.setText(resultado);
@@ -129,9 +144,9 @@ public class Calculadora {
         });
 
         porcentajeButton.addActionListener(e -> {
-            int porcentaje = 100;
-            int numero = Integer.parseInt(Operaciones.getText());
-
+            double numero = Double.parseDouble(Operaciones.getText());
+            double numero2 = Double.parseDouble(Operaciones.getText());
+            Resultado.setText(String.valueOf(calcularPorcentaje(numero,numero2)));
         });
 
         RaizButton.addActionListener(e -> {
@@ -162,10 +177,8 @@ public class Calculadora {
         ASCII.addActionListener(e -> {
             int num = Integer.parseInt(Operaciones.getText());
             StringBuilder resultado = new StringBuilder();
-            for (int i = 0; i < num; i++) {
-                char ascii = (char) num;
-                resultado.append(ascii);
-            }
+            char ascii = (char) num;
+            resultado.append(ascii);
             Resultado.setText(String.valueOf(resultado));
         });
 
@@ -177,22 +190,27 @@ public class Calculadora {
             }
         });
 
-        //TipoOperacion.addActionListener(actionEvent -> addActions());
+        /*
+          Esto nos sirve para instanciar los diálogos que hemos creado
+          anteriormente, mediante un ItemListener podemos saber que elemento
+          del JcomboBox, está eligiendo el usuario
+         */
         TipoOperacion.addItemListener(e -> {
             if (Objects.equals(TipoOperacion.getSelectedItem(), e.getItem())) {
                 try {
                     JDialog dialog = dialogs.get(e.getItem());
                     dialog.pack();
                     dialog.setVisible(true);
-                } catch (Exception ex) {
-                    // TODO: Implementar en calculadora sin dialogo
+                } catch (Exception ignored) {
 
                 }
             }
         });
     }
 
-
+    /**
+     * método que muestra el Jframe de la Clases.Calculadora
+     */
     public void mostrar() {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -202,6 +220,13 @@ public class Calculadora {
         frame.setVisible(true);
     }
 
+    /**
+     * @return int
+     * Método que retorna Operaciones simples.
+     * Con operaciones simples me refiero a aquellas que son:
+     * Sumar, restar, multiplicar, dividir.
+     * No incluye Operaciones con Parentesis
+     */
     public int operacionesSimples(){
         String[] valores = Operaciones.getText().split(" ");
         int op = 0;
@@ -236,6 +261,11 @@ public class Calculadora {
         return op;
     }
 
+    /**
+     * @return String
+     * Método que convierte el texto insertado del usuario
+     * a números Romanos
+     */
     public String convertirANumerosRomanos() {
         int numero = Integer.parseInt(Operaciones.getText());
         int i, miles, centenas, decenas, unidades;
@@ -299,6 +329,17 @@ public class Calculadora {
             }
         }
         return romano.toString();
+    }
+
+    /**
+     * @param porcent dato que sirve para coger el porcentaje a calcular
+     * @param cant dato que sirve para coger la cantidad dada por el usuario
+     * @return dato tipo double, ya que el porcentaje es de tipo double
+     */
+    public double calcularPorcentaje(double porcent, double cant){
+        double resultado;
+        resultado = (porcent / 100) * cant;
+        return resultado;
     }
 
     public static void main(String[] args) {

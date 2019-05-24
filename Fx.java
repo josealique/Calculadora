@@ -1,5 +1,13 @@
+package Clases;
+
 import javax.swing.*;
 import java.awt.event.*;
+
+/**
+ * @author jmaliquer
+ * @version 1.0
+ * @since 13-05-2019
+ */
 
 public class Fx extends JDialog {
     private JPanel contentPane;

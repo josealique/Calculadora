@@ -1,3 +1,5 @@
+package Clases;
+
 import java.util.*;
 
 public class Token {
@@ -53,7 +55,7 @@ public class Token {
         return String.valueOf(this.ttype);
     }
 
-    // Mètode equals. Comprova si dos objectes Token són iguals
+    // Mètode equals. Comprova si dos objectes Clases.Token són iguals
     @Override
     public boolean equals(Object o) {
         if (o instanceof Token) {

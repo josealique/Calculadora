@@ -1,3 +1,5 @@
+package Clases;
+
 import java.util.*;
 
 public class Evaluator {
@@ -29,7 +31,7 @@ public class Evaluator {
     // Limpiar la pila de Paréntesis
     public static void clean(List<Token> tokenRPN, LinkedList<Token> tokenOp) {
         while (!tokenOp.isEmpty()) {
-            // Si el Token es de tipo Paren, sacamos el primer elemento en la pila
+            // Si el Clases.Token es de tipo Paren, sacamos el primer elemento en la pila
             if (tokenOp.peek().getTtype() == Token.Toktype.PAREN) {
                 tokenOp.pop();
                 break;
@@ -38,7 +40,7 @@ public class Evaluator {
         }
     }
 
-    // Método que determina la precedencia del Token
+    // Método que determina la precedencia del Clases.Token
     public static void determinePrecedence(List<Token> tokenRPN, LinkedList<Token> tokenOp, Token t) {
         if (t.getTk() == ')') {
             clean(tokenRPN, tokenOp);

@@ -1,9 +1,15 @@
-import sun.security.krb5.internal.crypto.Des;
+package Clases;
 
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * @author jmaliquer
+ * @version 1.0
+ * @since 13-05-2019
+ */
 
 public class CambioUnidades extends JDialog {
     private JPanel contentPane;

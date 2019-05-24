@@ -1,7 +1,14 @@
+package Clases;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
+/**
+ * @author jmaliquer
+ * @version 1.0
+ * @since 13-05-2019
+ */
 public class CambioDeDivisas extends JDialog {
     private JPanel contentPane;
     private JButton Convertir;
@@ -55,10 +62,25 @@ public class CambioDeDivisas extends JDialog {
         dispose();
     }
 
+    /**
+     * método que se encargará de convertir las monedas de Euro a su
+     * respectiva selección
+     * @throws Exception
+     * Puede tirar una excepción al encontrar campos vacíos o con letras
+     */
     private void conversion(){
-        double cantidad = Double.parseDouble(CantidadDivisa.getText());
-        double resultado;
-        resultado =  cantidad * mapa.get(MonedaFinal.getSelectedItem().toString());
-        Resultado.setText(String.valueOf(resultado));
+        String s = CantidadDivisa.getText();
+        if (s.isEmpty()){
+            JOptionPane.showMessageDialog(null, "El campo no puede estar vacio", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            double cantidad = Double.parseDouble(CantidadDivisa.getText());
+            double resultado;
+            resultado =  cantidad * mapa.get(MonedaFinal.getSelectedItem().toString());
+            Resultado.setText(String.valueOf(resultado));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, "El campo de divisa no puede contener letras", "Alerta", JOptionPane.WARNING_MESSAGE);
+        }
     }
 }
